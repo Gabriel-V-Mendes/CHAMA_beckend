@@ -1,0 +1,35 @@
+# Regras Globais do Workspace — CHAMA_beckend
+
+Você está atuando no repositório **CHAMA_beckend** usando o **Antigravity CLI**.
+Siga rigorosamente estas regras em todas as sessões, independentemente do agente ou skill ativado.
+
+## 1. Fonte da Verdade (Contexto Vivo)
+Antes de propor mudanças estruturais, criar endpoints ou alterar o banco de dados, consulte sempre os documentos em `docs/specs/`:
+- `docs/specs/01-arquitetura.md` — Arquitetura, módulos e decisões técnicas (ADRs).
+- `docs/specs/02-contrato-api.md` — Padrão de rotas, payloads, erros e autenticação.
+- `docs/specs/03-modelo-dados.md` — Entidades, relacionamentos e regras de banco.
+- `docs/specs/04-seguranca-lgpd.md` — Requisitos de AppSec e conformidade LGPD.
+- `docs/specs/05-padroes-codigo.md` — Estilo de código, commits, testes e Git.
+
+Se o código atual divergir de uma spec, aponte a divergência antes de implementar.
+
+## 2. Disciplina de Engenharia
+- **Spec-First:** Para tarefas médias ou grandes, apresente um plano objetivo (arquivos impactados + abordagem) antes de editar código.
+- **Mudanças Incrementais:** Evite refatorações gigantes fora do escopo pedido. Resolva o problema com simplicidade e clareza.
+- **Sem Alucinações de API:** Use o MCP `context7` para consultar documentação atualizada de bibliotecas em vez de adivinhar assinaturas depreciadas.
+- **Testes Obrigatórios:** Toda nova regra de negócio, correção de bug ou endpoint deve incluir testes automatizados correspondentes.
+
+## 3. Segurança e Privacidade (Inviolável)
+- **Zero Segredos no Código:** Nunca escreva tokens, senhas, chaves privadas ou strings de conexão reais em arquivos rastreados pelo Git. Use sempre variáveis de ambiente.
+- **Proteção de Dados (LGPD):** Nunca registre PII (CPF, e-mail, telefone, endereço, dados de menores) em logs de aplicação ou mensagens de erro.
+- **Validação na Borda:** Todo input externo (body, query, params, headers) deve ser validado com schemas estritos.
+- **Banco de Dados:** Nunca execute comandos destrutivos (`DROP`, `TRUNCATE`, `DELETE` sem `WHERE`) sem confirmação explícita.
+
+## 4. Agentes e Skills Disponíveis
+- **Agentes (`.antigravity/agents/`):** `techlead.md`, `backend.md`, `frontend.md`, `ux-ui.md`, `devops.md`, `cybersecurity.md`.
+- **Skills (`.antigravity/skills/`):** `caveman.md`, `spec-first.md`, `pr-review.md`, `sec-audit.md`, `debug-root-cause.md`, `tdd-workflow.md`.
+
+## 5. Idioma e Comunicação
+- Comunicação, comentários de documentação e specs: **Português (PT-BR)**.
+- Código-fonte (variáveis, funções, classes, rotas técnicas): siga o padrão definido em `docs/specs/05-padroes-codigo.md`.
+- Seja direto, técnico e objetivo.
