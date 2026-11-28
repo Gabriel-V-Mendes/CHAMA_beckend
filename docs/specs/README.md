@@ -10,6 +10,7 @@ Esta pasta é a **fonte da verdade técnica** do projeto CHAMA. Todos os colabor
 3. [`03-modelo-dados.md`](./03-modelo-dados.md) — Entidades de domínio, relacionamentos, índices e migrações.
 4. [`04-seguranca-lgpd.md`](./04-seguranca-lgpd.md) — Controles AppSec, proteção de dados pessoais e LGPD.
 5. [`05-padroes-codigo.md`](./05-padroes-codigo.md) — Convenções de código, Git, PRs e estratégia de testes.
+6. [`06-modelo-dados-eventos.md`](./06-modelo-dados-eventos.md) — Entidades de eventos, localidades (estado/cidade) e inscrições.
 
 ## Regra de Manutenção
 Sempre que uma decisão arquitetural, endpoint ou tabela mudar, atualize a spec correspondente no mesmo PR.

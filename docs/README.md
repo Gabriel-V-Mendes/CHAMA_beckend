@@ -27,6 +27,7 @@ Antes de criar novos endpoints, alterar contratos JSON ou mexer no banco de dado
 3. [Spec 03 — Modelo de Dados](./specs/03-modelo-dados.md)
 4. [Spec 04 — Segurança e LGPD](./specs/04-seguranca-lgpd.md)
 5. [Spec 05 — Padrões de Código, Git e Testes](./specs/05-padroes-codigo.md)
+6. [Spec 06 — Modelo de Dados: Eventos](./specs/06-modelo-dados-eventos.md)
 
 ---
 
@@ -34,3 +35,4 @@ Antes de criar novos endpoints, alterar contratos JSON ou mexer no banco de dado
 
 - Migrações versionadas pelo Flyway: [`src/main/resources/db/migration/`](../src/main/resources/db/migration/)
 - Scripts manuais de reversão: [`docs/db/rollback/`](./db/rollback/)
+- Diagramas ER: [`docs/diagrams/`](./diagrams/)
