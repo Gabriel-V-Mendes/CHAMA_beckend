@@ -28,6 +28,19 @@
   - Request: `{ "refresh_token" }`
 - `GET /api/v1/auth/me` (`200 OK`, autenticado) — Retorna resumo do usuário logado (`UserSummaryResponse`).
 
+### Endpoints de Eventos (`/api/v1/events`, Spec 06)
+- `POST /api/v1/events` (`201 Created`, autenticado — `PARTNER` ou `ADMIN`) — Cria um novo evento com
+  status inicial `draft`.
+  - Request: `{ "title", "description", "category", "modality", "city?", "state_uf?", "address?",
+    "online_url?", "starts_at", "ends_at", "registration_closes_at?", "capacity?" }` — `city`/
+    `state_uf` obrigatórios salvo `modality = "online"`; `online_url` obrigatório salvo
+    `modality = "presencial"`.
+  - Response: `{ "id", "organizer_id", "title", "description", "category", "modality", "city",
+    "state_uf", "address", "online_url", "starts_at", "ends_at", "registration_closes_at",
+    "capacity", "status", "created_at" }`
+  - Erros de negócio: `422 EVENT_LOCATION_REQUIRED`, `422 EVENT_ONLINE_URL_REQUIRED`,
+    `422 EVENT_INVALID_DATE_RANGE`, `403 FORBIDDEN` (papel sem permissão de organizar eventos).
+
 ## 3. Paginação Padrão (Listagens)
 Query params: `?page=1&page_size=20` (máximo permitido: `page_size=100`).
 

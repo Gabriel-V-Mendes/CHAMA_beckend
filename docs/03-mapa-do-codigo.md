@@ -58,17 +58,48 @@ Este guia resume o papel de cada arquivo do repositório para acelerar o onboard
 
 ---
 
-## 5. Módulo de Saúde (`src/main/java/com/chama/backend/modules/health/`)
+## 5. Módulo de Eventos (`src/main/java/com/chama/backend/modules/event/`)
+
+- [`EventCategory.java`](../src/main/java/com/chama/backend/modules/event/model/EventCategory.java),
+  [`EventModality.java`](../src/main/java/com/chama/backend/modules/event/model/EventModality.java) e
+  [`EventStatus.java`](../src/main/java/com/chama/backend/modules/event/model/EventStatus.java) —
+  Enums de categoria, modalidade (`PRESENCIAL`/`ONLINE`/`HIBRIDO`) e ciclo de vida do evento.
+- [`Event.java`](../src/main/java/com/chama/backend/modules/event/model/Event.java) — Entidade JPA da
+  tabela `events`; `city`/`state_uf` são colunas de texto simples (sem tabelas de localidade — Spec 06).
+- [`EventRepository.java`](../src/main/java/com/chama/backend/modules/event/repository/EventRepository.java)
+  — Interface `JpaRepository` de eventos.
+- [`CreateEventRequest.java`](../src/main/java/com/chama/backend/modules/event/dto/CreateEventRequest.java)
+  — DTO de entrada da criação de evento, com normalização de texto e UF na borda.
+- [`EventResponse.java`](../src/main/java/com/chama/backend/modules/event/dto/EventResponse.java) — DTO
+  de saída pública de um evento.
+- [`EventMapper.java`](../src/main/java/com/chama/backend/modules/event/mapper/EventMapper.java) —
+  Converte `CreateEventRequest` -> `Event` e `Event` -> `EventResponse`, isolando o `EventService` da
+  montagem de objetos (SRP).
+- [`EventService.java`](../src/main/java/com/chama/backend/modules/event/service/EventService.java) —
+  Implementa `createEvent`, validando organizador ativo e consistência de localidade/link online por
+  modalidade e intervalo de datas.
+- [`EventController.java`](../src/main/java/com/chama/backend/modules/event/controller/EventController.java)
+  — Expõe `POST /api/v1/events`, restrito a `PARTNER`/`ADMIN` via `@PreAuthorize`.
+
+---
+
+## 6. Módulo de Saúde (`src/main/java/com/chama/backend/modules/health/`)
 
 - [`HealthController.java`](../src/main/java/com/chama/backend/modules/health/controller/HealthController.java) — Expõe `GET /health/live` (processo ativo), `GET /health/ready` (testa conexão real JDBC com PostgreSQL) e `GET /api/health` (retrocompatibilidade).
 
 ---
 
-## 6. Migrações SQL e Testes
+## 7. Migrações SQL e Testes
 
 - [`V1__init_auth_and_users_schema.sql`](../src/main/resources/db/migration/V1__init_auth_and_users_schema.sql) — Cria tabelas `users`, `student_profiles`, `refresh_tokens`, constraints e índices.
 - [`U1__rollback_init_auth_and_users_schema.sql`](../docs/db/rollback/U1__rollback_init_auth_and_users_schema.sql) — Script manual de reversão da `V1`.
+- [`V2__create_events_schema.sql`](../src/main/resources/db/migration/V2__create_events_schema.sql) —
+  Cria a tabela `events` (ainda sem `event_registrations`), com `CHECK`s de categoria, modalidade,
+  status, datas e consistência de localidade/link online.
+- [`U2__rollback_create_events_schema.sql`](../docs/db/rollback/U2__rollback_create_events_schema.sql) — Script manual de reversão da `V2`.
 - [`ChamaBackendApplicationTests.java`](../src/test/java/com/chama/backend/ChamaBackendApplicationTests.java) — Smoke test de carga completa do contexto Spring + Flyway + JPA + Security.
 - [`HealthControllerTest.java`](../src/test/java/com/chama/backend/modules/health/controller/HealthControllerTest.java) — Testa `/health/live`, `/health/ready` e `/api/health`.
 - [`AuthServiceTest.java`](../src/test/java/com/chama/backend/modules/auth/service/AuthServiceTest.java) — Testes unitários (Mockito + BCrypt real) de regras LGPD, menor de idade, e-mail duplicado e hash dummy.
 - [`AuthIntegrationTest.java`](../src/test/java/com/chama/backend/modules/auth/controller/AuthIntegrationTest.java) — Testes end-to-end HTTP via `MockMvc` cobrindo cadastro, login, `/me`, rotação e reuso de refresh token, logout, Mass Assignment (`400`), validação (`422`), falta de token (`401`) e rate limit (`429`).
+- [`EventServiceTest.java`](../src/test/java/com/chama/backend/modules/event/service/EventServiceTest.java) — Testes unitários (Mockito) de consistência localidade/modalidade, intervalo de datas e organizador inativo.
+- [`EventIntegrationTest.java`](../src/test/java/com/chama/backend/modules/event/controller/EventIntegrationTest.java) — Testes end-to-end HTTP cobrindo criação por `PARTNER`/`ADMIN`, bloqueio de `STUDENT` (`403`), falta de token (`401`), validação (`422`) e Mass Assignment (`400`).
